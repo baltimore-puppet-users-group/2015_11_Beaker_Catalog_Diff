@@ -1,0 +1,26 @@
+{
+  "name":    "baltipug-catalog_diff",
+  "version": "0.0.1-0",
+  "author":  "Baltimore PUG",
+  "summary": "A Puppet Module for performing catalog diffs",
+  "license": "Apache-2.0",
+  "source":  "https://github.com/baltimore-puppet-users-group/2015_11_Beaker_Catalog_Diff",
+  "project_page": "https://github.com/baltimore-puppet-users-group/2015_11_Beaker_Catalog_Diff/wiki",
+  "issues_url":   "https://github.com/baltimore-puppet-users-group/2015_11_Beaker_Catalog_Diff/issues",
+  "tags": [ "baltipug" ],
+  "dependencies": [
+    {
+      "name": "puppetlabs-stdlib",
+      "version_requirement": ">= 4.1.0"
+    }
+  ],
+  "operatingsystem_support": [
+    {
+      "operatingsystem": "CentOS",
+      "operatingsystemrelease": [
+        "6",
+        "7"
+      ]
+    }
+  ]
+}
