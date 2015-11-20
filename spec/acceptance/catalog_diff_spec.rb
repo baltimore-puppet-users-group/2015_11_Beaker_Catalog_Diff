@@ -11,9 +11,11 @@ describe 'Catalog Diff Tool' do
   hosts.each do |host|
     context 'build vX catalog' do
       # TODO: Add useful stuff here
+      on(host,%(ls))
     end
     context 'build vY catalog' do
       # TODO: Add useful stuff here
+      on(host,%(ls))
     end
   end
 end
