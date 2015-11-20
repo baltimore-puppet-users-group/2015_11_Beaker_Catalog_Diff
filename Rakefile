@@ -23,15 +23,6 @@ PuppetLint.configuration.ignore_paths = exclude_paths
 PuppetSyntax.exclude_paths = exclude_paths
 
 begin
-  require 'simp/rake/pkg'
-  Simp::Rake::Pkg.new( File.dirname( __FILE__ ) ) do | t |
-    t.clean_list << "#{t.base_dir}/spec/fixtures/hieradata/hiera.yaml"
-  end
-rescue LoadError
-  puts "== WARNING: Gem simp-rake-helpers not found, pkg: tasks cannot be run! =="
-end
-
-begin
   require 'simp/rake/beaker'
   Simp::Rake::Beaker.new( File.dirname( __FILE__ ) )
 rescue LoadError

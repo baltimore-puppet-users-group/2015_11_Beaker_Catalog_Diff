@@ -17,14 +17,6 @@ group :test do
   gem "simp-rspec-puppet-facts"
   # A bug the broke .ignore_paths was fixed on 30 Oct 2015:
   gem "puppet-lint", :git => 'https://github.com/rodjek/puppet-lint.git'
-
-  # simp-rake-helpers does not suport puppet 2.7.X
-  if "#{ENV['PUPPET_VERSION']}".scan(/\d+/).first != '2' &&
-      # simp-rake-helpers and ruby 1.8.7 bomb Travis tests
-      # TODO: fix upstream deps (parallel in simp-rake-helpers)
-      RUBY_VERSION.sub(/\.\d+$/,'') != '1.8'
-    gem 'simp-rake-helpers'
-  end
 end
 
 group :development do
