@@ -4,6 +4,11 @@ test_name 'Catalog Diff'
 
 describe 'Catalog Diff Tool' do
 
+  before(:all) do
+    sleep(1)
+    @run_id = Time.now.strftime("%F-%H-%M-%S")
+  end
+
   let(:manifest) {
     <<-EOS
       include 'diff_test'
@@ -13,14 +18,15 @@ describe 'Catalog Diff Tool' do
   _catalog_dir = File.join(File.dirname(__FILE__),'../../catalogs')
   let(:catalog_dir){ _catalog_dir }
 
-  let(:run_id){ Time.now.strftime("%F_%H_%M_%S") }
 
   unless File.directory?(_catalog_dir)
     FileUtils.mkdir_p(_catalog_dir)
   end
 
   def collect_catalog(host,parser_type,tmp_manifest)
-    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'operatingsystemrelease')}-#{parser_type}-catalog.json)
+    # TODO:  Need to set up directory structure for preserving hostname
+    #output_catalog = %(#{@run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'operatingsystemrelease')}-#{parser_type}-catalog.json)
+    output_catalog = %(#{fact_on(host,'fqdn')}-#{parser_type}-#{@run_id}-catalog.json)
 
     manifestdir = host.puppet['manifestdir']
     on(host, %(mkdir -p #{manifestdir} && mv #{tmp_manifest} #{manifestdir}/site.pp))
@@ -48,10 +54,17 @@ describe 'Catalog Diff Tool' do
     end
   end
 
-  diff_host = hosts.first
-  scp_to(
-    diff_host,
-    File.join(_catalog_dir,'*.json'),
-    diff_host.puppet['yamldir']
-  )
+  context 'do catalog diff' do
+    it 'should diff the catalogs' do
+      diff_host = hosts.first
+      Dir.glob(File.join(_catalog_dir,'*current-catalog.json')).each do |current_catalog|
+        future_catalog = current_catalog.gsub('current','future')
+
+        scp_to(diff_host, current_catalog, diff_host.puppet['yamldir'])
+        scp_to(diff_host, future_catalog, diff_host.puppet['yamldir'])
+
+        puts on(diff_host,%(puppet catalog diff #{diff_host.puppet['yamldir']}/#{current_catalog} #{diff_host.puppet['yamldir']}/#{future_catalog})).stdout
+      end
+    end
+  end
 end
