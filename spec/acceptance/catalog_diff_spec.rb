@@ -48,10 +48,16 @@ describe 'Catalog Diff Tool' do
     end
   end
 
-  diff_host = hosts.first
-  scp_to(
-    diff_host,
-    File.join(_catalog_dir,'*.json'),
-    diff_host.puppet['yamldir']
-  )
+  context 'do catalog diff' do
+    it 'should diff the catalogs' do
+      diff_host = hosts.first
+      Dir.glob(File.join(_catalog_dir,'*.json')).each do |catalog|
+        scp_to(
+          diff_host,
+          catalog,
+          diff_host.puppet['yamldir']
+        )
+      end
+    end
+  end
 end
