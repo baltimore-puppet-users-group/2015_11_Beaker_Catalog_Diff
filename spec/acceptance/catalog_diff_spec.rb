@@ -57,13 +57,21 @@ describe 'Catalog Diff Tool' do
   context 'do catalog diff' do
     it 'should diff the catalogs' do
       diff_host = hosts.first
-      Dir.glob(File.join(_catalog_dir,'*current-catalog.json')).each do |current_catalog|
+      Dir.glob(File.join(_catalog_dir,'*current-*catalog.json')).each do |current_catalog|
         future_catalog = current_catalog.gsub('current','future')
+        report_file = %(#{current_catalog.gsub('current-','')}.report)
+
+        next if File.exist?(report_file)
 
         scp_to(diff_host, current_catalog, diff_host.puppet['yamldir'])
         scp_to(diff_host, future_catalog, diff_host.puppet['yamldir'])
 
-        puts on(diff_host,%(puppet catalog diff #{diff_host.puppet['yamldir']}/#{current_catalog} #{diff_host.puppet['yamldir']}/#{future_catalog})).stdout
+        result = on(diff_host,%(puppet catalog diff #{diff_host.puppet['yamldir']}/#{File.basename(current_catalog)} #{diff_host.puppet['yamldir']}/#{File.basename(future_catalog)})).stdout
+
+        report_file = %(#{current_catalog.gsub('current-','')}.report)
+        File.open(report_file,'w') do |fh|
+          fh.puts(result)
+        end
       end
     end
   end
