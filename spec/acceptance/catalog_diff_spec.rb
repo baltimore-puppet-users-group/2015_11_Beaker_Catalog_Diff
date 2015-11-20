@@ -20,9 +20,8 @@ describe 'Catalog Diff Tool' do
   end
 
   def collect_catalog(parser_type)
-    client_info = fact_on(host,'os')
     tmp_manifest = result.cmd.split(/\s+/).last
-    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{client_info['name']}-#{client_info['release']['full']}-#{catalog_type}-catalog.json )
+    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'release')}-#{catalog_type}-catalog.json )
 
     manifestdir = host.puppet['manifestdir']
     on(host, %(mkdir -p #{manifestdir} && mv #{tmp_manifest} #{manifestdir}/site.pp))
