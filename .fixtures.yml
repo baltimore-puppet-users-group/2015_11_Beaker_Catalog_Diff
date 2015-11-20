@@ -2,5 +2,6 @@
 fixtures:
   repositories:
     stdlib: "git://github.com/simp/puppetlabs-stdlib"
+    catalog_diff: "https://github.com/acidprime/puppet-catalog-diff"
   symlinks:
     diff_test: "#{source_dir}"
