@@ -2,20 +2,24 @@ require 'spec_helper_acceptance'
 
 test_name 'Catalog Diff'
 
-diff_versions = {
-  '3.8.4' => 'stuff...',
-  '4.2.3' => 'other stuff...'
-}
-
 describe 'Catalog Diff Tool' do
+
+  let(:manifest) {
+    <<-EOS
+      include 'diff_test'
+    EOS
+  }
+
   hosts.each do |host|
-    context 'build vX catalog' do
-      # TODO: Add useful stuff here
-      on(host,%(ls))
+    context 'build 3.X catalog' do
+      it 'should work' do
+        apply_manifest_on(host, manifest, :catch_failures => true)
+      end
     end
-    context 'build vY catalog' do
-      # TODO: Add useful stuff here
-      on(host,%(ls))
+    context 'build 4.X catalog (future parser)' do
+      it 'should work' do
+        apply_manifest_on(host, manifest, :catch_failures => true)
+      end
     end
   end
 end
