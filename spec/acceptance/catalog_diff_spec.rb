@@ -25,7 +25,7 @@ describe 'Catalog Diff Tool' do
     manifestdir = host.puppet['manifestdir']
     on(host, %(mkdir -p #{manifestdir} && mv #{tmp_manifest} #{manifestdir}/site.pp))
 
-    catalog = on(host,%(puppet master --compile --parser=#{parser_type} #{fact_on(host,'fqdn')})).stdout
+    catalog = on(host,%(puppet master --logdest=syslog --compile --parser=#{parser_type} #{fact_on(host,'fqdn')})).stdout
 
     File.open(File.join(catalog_dir,output_catalog),'w') do |fh|
       fh.puts(catalog)
