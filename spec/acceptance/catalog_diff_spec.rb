@@ -10,10 +10,12 @@ describe 'Catalog Diff Tool' do
     EOS
   }
 
-  _catalog_dir = File.join(ENVIRONMENT_SPEC[:project_root],'catalogs')
+  require 'pry'
+  binding.pry
+  _catalog_dir = File.join(File.dirname(__FILE__),'../../catalogs')
   let(:catalog_dir){ _catalog_dir }
 
-  let(:run_id){ Time.now.to_f.to_s }
+  let(:run_id){ Time.now.strftime("%F_%H_%M_%S") }
 
   unless File.directory?(_catalog_dir)
     FileUtils.mkdir_p(_catalog_dir)
