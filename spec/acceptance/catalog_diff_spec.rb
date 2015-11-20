@@ -19,9 +19,8 @@ describe 'Catalog Diff Tool' do
     FileUtils.mkdir_p(_catalog_dir)
   end
 
-  def collect_catalog(parser_type)
-    tmp_manifest = result.cmd.split(/\s+/).last
-    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'release')}-#{catalog_type}-catalog.json )
+  def collect_catalog(host,parser_type,tmp_manifest)
+    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'release')}-#{parser_type}-catalog.json )
 
     manifestdir = host.puppet['manifestdir']
     on(host, %(mkdir -p #{manifestdir} && mv #{tmp_manifest} #{manifestdir}/site.pp))
@@ -37,13 +36,13 @@ describe 'Catalog Diff Tool' do
     ['current','future'].each do |parser_type|
       context "#{parser_type} parser" do
         it 'should work' do
-          result = apply_manifest_on(
+          tmp_manifest = apply_manifest_on(
             host,
             manifest,
             :catch_failures => true
-          )
+          ).cmd.split(/\s+/).last
 
-          collect_catalog(parser_type)
+          collect_catalog(host,parser_type,tmp_manifest)
         end
       end
     end
