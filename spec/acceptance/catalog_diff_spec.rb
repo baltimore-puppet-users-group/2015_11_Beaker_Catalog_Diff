@@ -10,8 +10,6 @@ describe 'Catalog Diff Tool' do
     EOS
   }
 
-  require 'pry'
-  binding.pry
   _catalog_dir = File.join(File.dirname(__FILE__),'../../catalogs')
   let(:catalog_dir){ _catalog_dir }
 
