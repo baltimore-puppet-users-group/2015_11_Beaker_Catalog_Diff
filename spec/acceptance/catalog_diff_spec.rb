@@ -20,7 +20,7 @@ describe 'Catalog Diff Tool' do
   end
 
   def collect_catalog(host,parser_type,tmp_manifest)
-    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'release')}-#{parser_type}-catalog.json )
+    output_catalog = %(#{run_id}-#{fact_on(host,'fqdn')}-#{fact_on(host,'operatingsystem')}-#{fact_on(host,'operatingsystemrelease')}-#{parser_type}-catalog.json)
 
     manifestdir = host.puppet['manifestdir']
     on(host, %(mkdir -p #{manifestdir} && mv #{tmp_manifest} #{manifestdir}/site.pp))
@@ -47,4 +47,11 @@ describe 'Catalog Diff Tool' do
       end
     end
   end
+
+  diff_host = hosts.first
+  scp_to(
+    diff_host,
+    File.join(_catalog_dir,'*.json'),
+    diff_host.puppet['yamldir']
+  )
 end
